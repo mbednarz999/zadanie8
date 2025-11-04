@@ -1,5 +1,4 @@
 import streamlit as st
-import audioop
 from pydub import AudioSegment
 from IPython.display import Audio
 from io import BytesIO
