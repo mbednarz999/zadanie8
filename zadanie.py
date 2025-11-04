@@ -1,6 +1,5 @@
 import streamlit as st
 from pydub import AudioSegment
-from IPython.display import Audio
 from io import BytesIO
 from dotenv import dotenv_values
 from openai import OpenAI
