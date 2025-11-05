@@ -9,6 +9,7 @@ AUDIO_TRANSCRIBE_MODEL = "whisper-1"
 #
 # MAIN
 #
+
 st.set_page_config(page_title="Generowanie napisów", layout="centered")
 
 st.title("🎬 Generowanie napisów v.2")    
@@ -31,13 +32,17 @@ except Exception as e:
     st.error(f"❌ Nieprawidłowy klucz OpenAI lub błąd połączenia:\n{e}")
     st.stop()
 
+st.divider()
+
 # Ładowanie pliku video
 
 uploaded_files = st.file_uploader(
-    "📺 Wybierz pliki wideo", accept_multiple_files=True, type=["mp4"]
+    "📺 Wybierz pliki wideo", accept_multiple_files=True, type=["mp4", "mov", "avi", "mkv"]
 )
 for uploaded_file in uploaded_files:
     st.video(uploaded_file)
+
+st.divider()
 
 # Generowanie audio z pliku video
 
@@ -47,3 +52,5 @@ for uploaded_file in uploaded_files:
     audio.export(audio_filename, format="mp3")
     st.write(f"🔊 Plik audio wygenerowany: {audio_filename}")
     st.audio(audio_filename)
+
+st.divider()
