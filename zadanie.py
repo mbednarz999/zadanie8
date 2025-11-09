@@ -1,5 +1,6 @@
 import streamlit as st
 from pydub import AudioSegment
+from IPython.display import Audio
 from io import BytesIO
 from dotenv import dotenv_values
 from openai import OpenAI
@@ -9,7 +10,6 @@ AUDIO_TRANSCRIBE_MODEL = "whisper-1"
 #
 # MAIN
 #
-
 st.set_page_config(page_title="Generowanie napisów", layout="centered")
 
 st.title("🎬 Generowanie napisów v.2")    
@@ -42,15 +42,34 @@ uploaded_files = st.file_uploader(
 for uploaded_file in uploaded_files:
     st.video(uploaded_file)
 
-st.divider()
+st.divider()    
 
-# Generowanie audio z pliku video
+ # Wyodrębnienie audio i generowanie napisów
 
 for uploaded_file in uploaded_files:
     audio = AudioSegment.from_file(uploaded_file)
-    audio_filename = uploaded_file.name.rsplit(".", 1)[0] + ".mp3"
-    audio.export(audio_filename, format="mp3")
-    st.write(f"🔊 Plik audio wygenerowany: {audio_filename}")
-    st.audio(audio_filename)
+    audio_buffer = BytesIO()
+    audio.export(audio_buffer, format="mp3")
+    audio_buffer.seek(0)
+    audio_buffer.name = "audio.mp3"
 
-st.divider()
+    st.markdown("🔊 Wygenerowane audio:", unsafe_allow_html=True)
+    st.audio(audio_buffer, format="audio/mp3")
+
+    transcript = openai_client.audio.transcriptions.create(
+        file=audio_buffer,
+        model=AUDIO_TRANSCRIBE_MODEL,
+        response_format="srt"
+    )
+    st.write(f"📝 Wygenerowane napisy: {uploaded_file.name}")
+    st.text_area(
+        label=f"Napisy dla {uploaded_file.name}",
+        value=transcript,
+        height=200
+    )
+    st.download_button(
+        label="⬇️ Pobierz napisy",
+        data=transcript,
+        file_name=uploaded_file.name.rsplit(".", 1)[0] + ".srt",
+        mime="text/plain"
+    )
