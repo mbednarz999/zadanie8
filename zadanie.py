@@ -69,9 +69,9 @@ for uploaded_file in uploaded_files:
             value=transcript,
             height=300
         )
-    st.download_button(
-        label="⬇️ Pobierz napisy w formacie SRT",
-        data=transcript,
-        file_name=uploaded_file.name.rsplit(".", 1)[0] + ".srt",
-        mime="text/plain"
+        st.download_button(
+            label="⬇️ Pobierz napisy w formacie SRT",
+            data=transcript,
+            file_name=uploaded_file.name.rsplit(".", 1)[0] + ".srt",
+            mime="text/plain"
         )
