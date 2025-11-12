@@ -57,21 +57,24 @@ for uploaded_file in uploaded_files:
 
     spinner = st.spinner("Generowanie napisów...")
     with spinner:
-    
+   
         transcript = openai_client.audio.transcriptions.create(
             file=audio_buffer,
             model=AUDIO_TRANSCRIBE_MODEL,
             response_format="srt"
         )
-        st.write(f"📝 Wygenerowane napisy: {uploaded_file.name}")
-        st.text_area(
-            label=f"Napisy dla {uploaded_file.name}",
+      
+        subtitles= st.text_area(
+            label=f"📝 Sprawdź i popraw napisy dla: {uploaded_file.name}",
             value=transcript,
             height=300
-        )
-        st.download_button(
-            label="⬇️ Pobierz napisy w formacie SRT",
-            data=transcript,
-            file_name=uploaded_file.name.rsplit(".", 1)[0] + ".srt",
-            mime="text/plain"
-        )
+        )   
+        save_button = st.button("💾 Zapisz napisy")
+        if save_button:
+            transcript = subtitles
+            
+            st.download_button(
+                label="⬇️ Pobierz napisy",
+                data=transcript,
+                file_name=uploaded_file.name.rsplit(".", 1)[0] + ".srt",
+            )
