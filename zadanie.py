@@ -11,7 +11,7 @@ AUDIO_TRANSCRIBE_MODEL = "whisper-1"
 #
 st.set_page_config(page_title="Generowanie napisów", layout="centered")
 
-st.title("🎬 Generowanie napisów v.2")    
+st.title("🎬 Generowanie napisów v.4")    
 
 # Wprowadzenie klucza OpenAI z obsługą wyjątków
 
